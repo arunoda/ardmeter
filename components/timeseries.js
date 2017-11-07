@@ -26,7 +26,7 @@ export default class TimeSeries extends React.Component {
       onPoint = () => null
     } = this.props
 
-    const drawingHeight = height - (op * 2)
+    const drawingHeight = height - (op * 2) - 50
     const drawingWidth = width - (op * 2)
     const maxY = Math.max(...(data.map(i => i.y)))
     const yScale = Math.floor(drawingHeight / maxY)
@@ -48,7 +48,7 @@ export default class TimeSeries extends React.Component {
           r={dotR}
           cx={calcX(lc)}
           cy={calcY(item.y)}
-          fill='gray'
+          fill='rgb(94, 220, 229)'
           ref={i => (el = i)}
           onMouseOver={() => onPoint(item)}
           onMouseEnter={() => el.setAttribute('r', dotR * 2)}
@@ -64,7 +64,7 @@ export default class TimeSeries extends React.Component {
             y1={calcY(prevItem.y)}
             x2={calcX(lc)}
             y2={calcY(item.y)}
-            stroke='gray'
+            stroke='rgb(94, 220, 229)'
             strokeWidth={lineW}
           />
         )
