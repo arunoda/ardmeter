@@ -29,12 +29,21 @@ export default class extends React.Component {
   }
 
   componentDidMount () {
+    this.start()
+  }
+
+  componentWillUnmount () {
+    this.stop()
+  }
+
+  start () {
+    clearTimeout(this.timeoutHandler)
     this.timeoutHandler = setInterval(() => {
       this.setState({ data: genData() })
     }, 500)
   }
 
-  componentWillUnmount () {
+  stop () {
     clearTimeout(this.timeoutHandler)
   }
 
@@ -44,18 +53,21 @@ export default class extends React.Component {
     return (
       <div className='wrapper'>
         <TimeSeries
-          width={1200}
+          width={1000}
           height={500}
-          outerPadding={50}
+          outerPadding={0}
           data={data}
           xScale={10}
           dotR={3}
           lineW={2}
+          onPoint={(p) => console.log(p)}
+          onEnterChart={() => this.stop()}
+          onExitChart={() => this.start()}
         />
         <style jsx>{`
           .wrapper {
             text-align: center;
-            margin-top: 150px;
+            margin-top: 50px;
           }
         `}</style>
       </div>

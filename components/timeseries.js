@@ -22,7 +22,8 @@ export default class TimeSeries extends React.Component {
       data,
       xScale = 50,
       dotR = 3,
-      lineW = 1
+      lineW = 1,
+      onPoint = () => null
     } = this.props
 
     const drawingHeight = height - (op * 2)
@@ -40,6 +41,7 @@ export default class TimeSeries extends React.Component {
 
     for (let lc = 0; lc < drawableData.length; lc++) {
       const item = drawableData[drawableData.length - lc - 1]
+      let el = null
       points.push(
         <circle
           key={`c-${lc}`}
@@ -47,6 +49,10 @@ export default class TimeSeries extends React.Component {
           cx={calcX(lc)}
           cy={calcY(item.y)}
           fill='gray'
+          ref={i => (el = i)}
+          onMouseOver={() => onPoint(item)}
+          onMouseEnter={() => el.setAttribute('r', dotR * 2)}
+          onMouseOut={() => el.setAttribute('r', dotR)}
         />
       )
 
@@ -73,11 +79,18 @@ export default class TimeSeries extends React.Component {
   render () {
     const {
       width,
-      height
+      height,
+      onEnterChart = () => null,
+      onExitChart = () => null
     } = this.props
 
     return (
-      <svg width={width} height={height}>
+      <svg
+        width={width}
+        height={height}
+        onMouseOver={onEnterChart}
+        onMouseOut={onExitChart}
+      >
         {this.renderAxis()}
         {this.renderChart()}
       </svg>
