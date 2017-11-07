@@ -1,0 +1,22 @@
+{
+  "name": "ardmeter",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "dev": "next -p 8822"
+  },
+  "repository": "git@github.com:arunoda/ardmeter.git",
+  "author": "Arunoda Susiripala <arunoda.susiripala@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^4.1.4",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-simple-tooltip": "^2.0.0",
+    "react-svg-line-chart": "^1.0.6"
+  },
+  "devDependencies": {
+    "standard": "^10.0.3"
+  }
+}
