@@ -17,6 +17,14 @@
     "react-svg-line-chart": "^1.0.6"
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.2",
     "standard": "^10.0.3"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "**/node_modules/**",
+      "**/examples/**/lib/**"
+    ]
   }
 }

@@ -1,8 +1,8 @@
 import React from 'react'
-import TimeSeries from '../components/timeseries';
+import TimeSeries from '../components/timeseries'
 
-const data = [];
-for (let lc=0; lc<1000; lc++) {
+const data = []
+for (let lc = 0; lc < 1000; lc++) {
   data.push({
     y: getRandom(),
     x: `x-${lc}`
@@ -23,26 +23,26 @@ function genData () {
 }
 
 export default class extends React.Component {
-  constructor(...args) {
+  constructor (...args) {
     super(...args)
     this.state = { data: [] }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.timeoutHandler = setInterval(() => {
       this.setState({ data: genData() })
-    }, 500);
+    }, 500)
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.timeoutHandler);
+  componentWillUnmount () {
+    clearTimeout(this.timeoutHandler)
   }
 
-  render() {
-    const { data } = this.state;
+  render () {
+    const { data } = this.state
 
     return (
-      <div className="wrapper">
+      <div className='wrapper'>
         <TimeSeries
           width={1200}
           height={500}
@@ -62,4 +62,3 @@ export default class extends React.Component {
     )
   }
 }
-
