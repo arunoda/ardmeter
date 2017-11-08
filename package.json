@@ -20,6 +20,7 @@
     "react-dom": "^16.0.0",
     "react-simple-tooltip": "^2.0.0",
     "react-svg-line-chart": "^1.0.6",
+    "serialport": "^6.0.4",
     "stream-http": "^2.7.2"
   },
   "devDependencies": {

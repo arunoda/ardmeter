@@ -1,49 +1,92 @@
 /* eslint no-await-in-loop:0, no-constant-condition: 0 */
 const {Readable} = require('stream')
 const sleep = require('es7-sleep')
+const SerialPort = require('serialport');
+const { EventEmitter } = require('events');
 
-module.exports = class Device extends Readable {
-  constructor ({serialPort, highWaterMark}) {
-    super({
-      objectMode: true,
-      highWaterMark
+module.exports = class Device extends EventEmitter {
+  constructor(port, limit = 1000) {
+    super();
+    this.limit = limit;
+    this.serialPort = new SerialPort(port, { baudRate: 9600, autoOpen: false });
+    this.data = [];
+  }
+
+  open () {
+    return new Promise((done, failed) => {
+      this.
+      serialPort.open((err) => {
+        if (err) {
+          failed(err);
+          return;
+        }
+
+        this._watch();
+        done();
+      })
+    })
+  }
+
+  _watch () {
+    this.serialPort.on('data', (item) => {
+      const payload = item.toString('utf8').trim();
+      const matched = payload.match(/^(.*)mA/);
+      if (matched) {
+        const measurement = { timestamp: Date.now(), mA: parseFloat(matched[1]) }
+        this.data.push(measurement);
+        if (this.data.length === this.limit) {
+          this.data.unshift();
+        }
+        this.emit('data', measurement)
+      } else {
+        console.warn('Unknown data recieved: ', payload);
+      }
     })
 
-    this.serialPort = serialPort
-    this.fetching = false
+    this.serialPort.on('error', (err) => {
+      console.error('Serial port error');
+      console.error(err.stack);
+      process.exit(1);
+    });
+
+    this.serialPort.on('close', () => {
+      console.log('Port closed')
+      process.exit(0);
+    })
   }
 
-  async startFetching () {
-    if (this.fetching) {
+  toStream () {
+    return new DeviceStream(this);
+  }
+}
+
+class DeviceStream extends Readable {
+  constructor(device) {
+    super({ objectMode: true });
+    this.device = device;
+    this.destroy = false;
+    this.running = false;
+  }
+
+
+  _read() {
+    if (this.running) {
       return
     }
-    this.fetching = true
 
-    while (true) {
-      if (this.destroyed) {
-        break
-      }
+    this.running = true;
+    
+    const pushNewData = (i) => {this.push(i)}
+    this.device.data.forEach(pushNewData)
+    this.device.on('data', pushNewData);
 
-      let canPush = this.push({ timestamp: Date.now(), mA: Math.ceil(Math.random() * 20) })
-      await sleep(500)
-
-      // We can't push anymore. So, we need to stop fetching.
-      // Eventually, this._ready will start this again.
-      if (!canPush) {
-        this.fetching = false
-        break
-      }
+    this._close = () => {
+      this.device.removeListener('data', pushNewData);
     }
   }
 
-  _read () {
-    this.startFetching()
-      .catch(err => {
-        this.emit('error', err)
-      })
-  }
-
-  _destroy () {
-    this.destroyed = true
+  _destroy() {
+    this.destroy = true;
+    this._close();
   }
 }
