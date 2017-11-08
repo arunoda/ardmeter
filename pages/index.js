@@ -1,41 +1,24 @@
 import React from 'react'
 import TimeSeries from '../components/timeseries'
+import Device from '../lib/device'
 import moment from 'moment'
-
-const data = []
-for (let lc = 0; lc < 1000; lc++) {
-  data.push({
-    y: getRandom(),
-    x: Date.now()
-  })
-}
-
-function getRandom () {
-  return 25 + (Math.ceil(Math.random() * 5))
-}
-
-function genData () {
-  data.unshift()
-  data.push({
-    y: getRandom(),
-    x: Date.now()
-  })
-  return data
-}
 
 export default class extends React.Component {
   constructor (...args) {
     super(...args)
     this.state = { data: null }
     this.start = this.start.bind(this)
+    this.device = new Device()
   }
 
   componentDidMount () {
+    this.device.connect()
     this.start()
     window.addEventListener('resize', this.start, false)
   }
 
   componentWillUnmount () {
+    this.device.close()
     this.stop()
     window.removeEventListener('resize', this.start)
   }
@@ -47,16 +30,18 @@ export default class extends React.Component {
     clearTimeout(this.timeoutHandler)
     this.timeoutHandler = setInterval(() => {
       this.setState({
-        data: genData(),
+        data: this.device.getData(),
         selectedPoint: null,
         chartWidth: width - 200,
-        chartHeight: height - 400
+        chartHeight: height > 300 ? (height - 300) : height
       })
     }, 500)
   }
 
   stop () {
     clearTimeout(this.timeoutHandler)
+    const data = this.device.getData()
+    this.setPoint(data[data.length - 1])
   }
 
   setPoint (p) {
@@ -65,7 +50,7 @@ export default class extends React.Component {
 
   render () {
     const { data, selectedPoint, chartWidth, chartHeight } = this.state
-    if (!data) {
+    if (!data || data.length === 0) {
       return (<p>Loading...</p>)
     }
 
