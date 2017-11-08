@@ -12,13 +12,12 @@ const app = next({ dir: '.', dev })
 const handler = app.getRequestHandler()
 
 const start = async () => {
-  const device = new Device('/dev/cu.wchusbserial1420');
-  await device.open();
-  await app.prepare();
-
+  const device = new Device('/dev/cu.wchusbserial1420')
+  await device.open()
+  await app.prepare()
 
   server.use('/device', (req, res) => {
-    const deviceStream = device.toStream();
+    const deviceStream = device.toStream()
     const lines = jsonlines.stringify()
     const final = multipipe(deviceStream, lines, res)
 
@@ -51,6 +50,6 @@ const start = async () => {
 
 start()
   .catch((err) => {
-    console.error(err.stack);
-    process.exit(1);
+    console.error(err.stack)
+    process.exit(1)
   })

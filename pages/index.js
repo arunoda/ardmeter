@@ -29,8 +29,9 @@ export default class extends React.Component {
 
     clearTimeout(this.timeoutHandler)
     this.timeoutHandler = setInterval(() => {
+      const data = this.device.getData()
       this.setState({
-        data: this.device.getData(),
+        data,
         selectedPoint: null,
         chartWidth: width - 200,
         chartHeight: height > 300 ? (height - 300) : height
