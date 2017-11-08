@@ -4,13 +4,17 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard",
-    "dev": "next -p 8822"
+    "dev": "node server"
   },
   "repository": "git@github.com:arunoda/ardmeter.git",
   "author": "Arunoda Susiripala <arunoda.susiripala@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "es7-sleep": "^1.0.0",
+    "express": "^4.16.2",
+    "jsonlines": "^0.1.1",
     "moment": "^2.19.1",
+    "multipipe": "^1.0.2",
     "next": "^4.1.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
