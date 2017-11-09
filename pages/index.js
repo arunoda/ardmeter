@@ -41,7 +41,6 @@ export default class extends React.Component {
 
   stop () {
     clearTimeout(this.timeoutHandler)
-    const data = this.device.getData()
   }
 
   setPoint (p) {

@@ -4,13 +4,13 @@ const jsonlines = require('jsonlines')
 const multipipe = require('multipipe')
 const Device = require('./device')
 
-const devicePort = process.argv[2];
+const devicePort = process.argv[2]
 if (!devicePort) {
   console.error(`
 Run the command with:
   ardmeter <device path>
   `)
-  process.exit(1);
+  process.exit(1)
 }
 
 const dev = process.env.NODE_ENV !== 'production'

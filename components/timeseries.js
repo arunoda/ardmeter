@@ -9,8 +9,8 @@ export default class TimeSeries extends React.Component {
     } = this.props
 
     return [
-      <line key='y-axis' x1={op} y1={op} x2={op} y2={height - op} stroke='gray' strokeWidth={3} />,
-      <line key='x-axis' x1={op} y1={height - op} x2={width - op} y2={height - op} stroke='gray' strokeWidth={3} />
+      <line key='y-axis' x1={op} y1={op} x2={op} y2={height - op} stroke='#CCC' strokeWidth={1} />,
+      <line key='x-axis' x1={op} y1={height - op} x2={width - op} y2={height - op} stroke='#CCC' strokeWidth={1} />
     ]
   }
 
@@ -34,6 +34,8 @@ export default class TimeSeries extends React.Component {
     const drawableData = data.length > drawablePoints ? data.slice(data.length - drawablePoints) : data
 
     const points = []
+    const bars = []
+    const cursors = []
     const lines = []
     let prevItem = null
 
@@ -42,7 +44,8 @@ export default class TimeSeries extends React.Component {
 
     for (let lc = 0; lc < drawableData.length; lc++) {
       const item = drawableData[drawableData.length - lc - 1]
-      let el = null
+      let pointEl = null
+      let cursorEl = null
       points.push(
         <circle
           key={`c-${lc}`}
@@ -50,10 +53,41 @@ export default class TimeSeries extends React.Component {
           cx={calcX(lc)}
           cy={calcY(item.y)}
           fill='rgb(94, 220, 229)'
-          ref={i => (el = i)}
+          ref={el => (pointEl = el)}
+        />
+      )
+
+      bars.push(
+        <line
+          key={`b-${lc}`}
+          x1={calcX(lc)}
+          y1={0}
+          x2={calcX(lc)}
+          y2={height}
+          stroke='#fff'
+          strokeWidth={xScale}
           onMouseOver={() => onPoint(item)}
-          onMouseEnter={() => el.setAttribute('r', dotR * 2)}
-          onMouseOut={() => el.setAttribute('r', dotR)}
+          onMouseEnter={() => {
+            pointEl.setAttribute('r', dotR * 2)
+            cursorEl.setAttribute('stroke', '#DDD')
+          }}
+          onMouseOut={() => {
+            pointEl.setAttribute('r', dotR)
+            cursorEl.setAttribute('stroke', 'white')
+          }}
+        />
+      )
+
+      cursors.push(
+        <line
+          key={`cu-${lc}`}
+          x1={calcX(lc)}
+          y1={5}
+          x2={calcX(lc)}
+          y2={height - 5}
+          stroke='white'
+          strokeWidth={1}
+          ref={(el) => { cursorEl = el }}
         />
       )
 
@@ -74,7 +108,7 @@ export default class TimeSeries extends React.Component {
       prevItem = item
     }
 
-    return [...lines, ...points]
+    return [...bars, ...cursors, ...lines, ...points]
   }
 
   render () {
@@ -92,8 +126,8 @@ export default class TimeSeries extends React.Component {
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
       >
-        {this.renderAxis()}
         {this.renderChart()}
+        {this.renderAxis()}
       </svg>
     )
   }
