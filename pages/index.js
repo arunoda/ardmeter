@@ -80,7 +80,7 @@ export default class extends React.Component {
 
         {selectedPoint ? (
           <div className='resume-info'>
-            [ Move the mouse outside of the chart to get latest values ]
+            [ Leave the chart to resume ]
           </div>
         ) : null}
         <style jsx>{`
