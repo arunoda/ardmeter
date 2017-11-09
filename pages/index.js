@@ -42,7 +42,6 @@ export default class extends React.Component {
   stop () {
     clearTimeout(this.timeoutHandler)
     const data = this.device.getData()
-    this.setPoint(data[data.length - 1])
   }
 
   setPoint (p) {
@@ -76,8 +75,8 @@ export default class extends React.Component {
           dotR={3}
           lineW={2}
           onPoint={(p) => this.setPoint(p)}
-          onEnterChart={() => this.stop()}
-          onExitChart={() => this.start()}
+          onEnter={() => this.stop()}
+          onLeave={() => this.start()}
         />
 
         {selectedPoint ? (

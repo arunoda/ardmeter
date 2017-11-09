@@ -81,16 +81,16 @@ export default class TimeSeries extends React.Component {
     const {
       width,
       height,
-      onEnterChart = () => null,
-      onExitChart = () => null
+      onEnter = () => null,
+      onLeave = () => null
     } = this.props
 
     return (
       <svg
         width={width}
         height={height}
-        onMouseOver={onEnterChart}
-        onMouseOut={onExitChart}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
       >
         {this.renderAxis()}
         {this.renderChart()}
