@@ -4,6 +4,15 @@ const jsonlines = require('jsonlines')
 const multipipe = require('multipipe')
 const Device = require('./device')
 
+const devicePort = process.argv[2];
+if (!devicePort) {
+  console.error(`
+Run the command with:
+  ardmeter <device path>
+  `)
+  process.exit(1);
+}
+
 const dev = process.env.NODE_ENV !== 'production'
 const port = process.env.PORT || 8822
 
@@ -12,7 +21,7 @@ const app = next({ dir: '.', dev })
 const handler = app.getRequestHandler()
 
 const start = async () => {
-  const device = new Device('/dev/cu.wchusbserial1420')
+  const device = new Device(devicePort.trim())
   await device.open()
   await app.prepare()
 
@@ -44,7 +53,7 @@ const start = async () => {
       process.exit(1)
     }
 
-    console.log(`App started on port: http://localhost:${port}`)
+    console.log(`Dashboard URL: http://localhost:${port}`)
   })
 }
 
