@@ -1,0 +1,8 @@
+* [x] Create a local react timeline
+* [x] Make it update by time to time
+* [x] Get a socket stream from the server
+* [x] Get a socket stream from the serial
+* [ ] Handle reconnect disconnect and reconnect login inside the client
+* [x] Accept the port from the command line.
+* [x] Currently selectd value looks not right.
+* Change the design
