@@ -46,6 +46,17 @@ export default class TimeSeries extends React.Component {
       const item = drawableData[drawableData.length - lc - 1]
       let pointEl = null
       let cursorEl = null
+
+      const enterPoint = () => {
+        pointEl.setAttribute('r', dotR * 2)
+        cursorEl.setAttribute('stroke', '#DDD')
+      }
+
+      const leavePoint = () => {
+        pointEl.setAttribute('r', dotR)
+        cursorEl.setAttribute('stroke', 'white')
+      }
+
       points.push(
         <circle
           key={`c-${lc}`}
@@ -54,6 +65,8 @@ export default class TimeSeries extends React.Component {
           cy={calcY(item.y)}
           fill='rgb(94, 220, 229)'
           ref={el => (pointEl = el)}
+          onMouseEnter={() => enterPoint()}
+          onMouseOut={() => leavePoint()}
         />
       )
 
@@ -67,14 +80,8 @@ export default class TimeSeries extends React.Component {
           stroke='#fff'
           strokeWidth={xScale}
           onMouseOver={() => onPoint(item)}
-          onMouseEnter={() => {
-            pointEl.setAttribute('r', dotR * 2)
-            cursorEl.setAttribute('stroke', '#DDD')
-          }}
-          onMouseOut={() => {
-            pointEl.setAttribute('r', dotR)
-            cursorEl.setAttribute('stroke', 'white')
-          }}
+          onMouseEnter={() => enterPoint()}
+          onMouseOut={() => leavePoint()}
         />
       )
 
