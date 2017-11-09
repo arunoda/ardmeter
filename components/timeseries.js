@@ -28,10 +28,13 @@ export default class TimeSeries extends React.Component {
 
     const drawingHeight = height - (op * 2)
     const drawingWidth = width - (op * 2)
-    const maxY = Math.max(...(data.map(i => i.y)))
-    const yScale = Math.floor((drawingHeight * 0.8) / maxY)
     const drawablePoints = Math.ceil(drawingWidth / xScale)
     const drawableData = data.length > drawablePoints ? data.slice(data.length - drawablePoints) : data
+
+    const maxY = Math.max(...(drawableData.map(i => i.y)))
+    const yScale = (drawingHeight * 0.8) / maxY
+
+    console.log('XXX', yScale)
 
     const points = []
     const bars = []

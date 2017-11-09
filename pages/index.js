@@ -47,6 +47,13 @@ export default class extends React.Component {
     this.setState({selectedPoint: p})
   }
 
+  getValue (item) {
+    // item.y is in uA (micro Amps)
+    // We need to return it as mA with 3 decimal points for better readability
+    const value = (item.y / 1000).toFixed(3)
+    return `${value}mA`
+  }
+
   render () {
     const { data, selectedPoint, chartWidth, chartHeight } = this.state
     if (!data || data.length === 0) {
@@ -61,7 +68,7 @@ export default class extends React.Component {
       <div className='wrapper'>
         {value ? (
           <div className='value'>
-            <div className='caption'>{caption} - {value.y}mA</div>
+            <div className='caption'>{caption} - {this.getValue(value)}</div>
           </div>
         ) : null}
 

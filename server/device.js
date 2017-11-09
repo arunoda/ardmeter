@@ -29,9 +29,9 @@ module.exports = class Device extends EventEmitter {
   _watch () {
     this.serialPort.on('data', (item) => {
       const payload = item.toString('utf8').trim()
-      const matched = payload.match(/^(.*)mA/)
+      const matched = payload.match(/^(.*)uA/)
       if (matched) {
-        const measurement = { timestamp: Date.now(), mA: parseFloat(matched[1]) }
+        const measurement = { timestamp: Date.now(), uA: parseFloat(matched[1]) }
         this.data.push(measurement)
         if (this.data.length === this.limit) {
           this.data.unshift()
